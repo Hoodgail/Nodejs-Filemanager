@@ -1,0 +1,52 @@
+.item {
+    display: inline-block;
+    padding: 14px;
+    background: #00000026;
+    border-radius: 5px;
+    margin: 10px;
+    text-overflow: ellipsis;
+    width: 113px;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    transition: all 0.1s;
+    transform: translate(0px, 0px);
+}
+.item .switch {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    border-radius: 5px;
+    background:transparent;
+    border: solid 2px #5a5f69;
+    transform: translate(-2px, -2px) scale(0.9);
+    background: transparent;
+}
+.item .switch.selected{
+    border: none;
+    transform: translate(0px, 0px) scale(1);
+    background: #5a5f69;
+}
+.item:hover {
+    box-shadow: 0px 6px 20px 0px #00000030;
+    background: #0000004a;
+    transform: scale(1.1);
+}
+.item .icon svg {
+    width:48px;
+    height:48px;
+}
+.item .icon {
+    width: min-content;
+    margin: auto;
+    user-select: none;
+}
+.item .icon * {
+    user-select: none;
+}
+.item > span {
+    text-overflow: ellipsis;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+}

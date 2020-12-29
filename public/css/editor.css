@@ -1,0 +1,49 @@
+.editor-container {
+    overflow: hidden !important;
+}
+.editor-container > .swal2-popup {
+    text-align: left !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 0px;
+    background: #1b1b1b;
+    margin: 0px !important;
+    padding: 0px;
+}
+.editor-container .swal2-styled.swal2-confirm {
+    border-radius: 50px;
+    background: #00000052;
+    color: grey;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    margin: 10px;
+}
+.swal2-content > .swal2-html-container > .editor-child {
+    background: #0000006e;
+}
+.editor-container > .swal2-popup > .swal2-content {
+    height: -webkit-fill-available !important;
+    margin-top: 65px !important;
+    text-align: left !important;
+    width: -webkit-fill-available !important;
+    padding: 0px;
+    margin: 0px;
+}
+.editor-container .swal2-actions {
+    margin:0px !important;
+}
+.editor-container > .swal2-popup > .swal2-content > .swal2-html-container, .editor-child  {
+    height: -webkit-fill-available !important;
+    text-align: left !important;
+    width: -webkit-fill-available !important;
+}
+.editor-tools {
+    position: absolute;
+    top: 0;
+    left: 0;
+}

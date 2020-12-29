@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+<title>SSH Client</title>
+<script src="/socket.io/socket.io.js"></script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<style>
+   body {
+     margin: 0;
+     padding: 0;
+   }
+   .terminal {
+     font-family: monospace;
+     color: white;
+     background: black;
+   }
+</style>
+</head>
+<body>
+<h1>SSH</h1>
+<div class="terminal"> 
+</div>
+<script>
+    // Connect to the socket.io server
+var socket = io.connect('http://localhost:3000');
+// Wait for data from the server
+socket.on('output', function (data) {
+   // Insert some line breaks where they belong
+   data = data.replace("n", "<br>");
+   data = data.replace("r", "<br>");
+   // Append the data to our terminal
+   $('.terminal').append(data);
+});
+// Listen for user input and pass it to the server
+$(document).on("keypress",function(e){
+var char = String.fromCharCode(e.which);
+socket.emit("input", char);
+});
+</script>
+</body>
+</html>

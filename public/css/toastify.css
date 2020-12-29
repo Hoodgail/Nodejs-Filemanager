@@ -1,0 +1,20 @@
+.toastify {
+    padding: 12px 20px;
+    color: #fff;
+    display: inline-block;
+    box-shadow: 0 3px 6px -1px rgba(0,0,0,.12),0 10px 36px -4px rgba(77,96,232,.3);
+    background: -webkit-linear-gradient(315deg,#73a5ff,#5477f5);
+    background: linear-gradient(135deg,#73a5ff,#5477f5);
+    position: fixed;
+    top: -150px;
+    right: 15px;
+    opacity: 0;
+    transition: all .4s cubic-bezier(.215,.61,.355,1);
+    border-radius: 2px;
+    cursor: pointer
+}
+
+.toastify.on {
+    opacity: 1;
+    z-index: 10000000;
+}
