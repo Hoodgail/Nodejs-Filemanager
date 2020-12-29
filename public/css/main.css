@@ -4,25 +4,29 @@
 @import "./material-ocean.css";
 @import "./material-icons/main.css";
 @import "./toastify.css";
+
 body {
     font-family: monospace;
-    color:white;
+    color: white;
     margin: 0px;
 }
+
 .listing {
-    background:#36393f;
+    background: #36393f;
     height: 85vh;
     width: 100%;
     overflow: auto;
 }
+
 .info {
-    background:#26292e;
+    background: #26292e;
     height: 5vh;
     display: flex;
     width: 100%;
 }
+
 .tools {
-    background:#40444b;
+    background: #40444b;
     height: 10vh;
     width: 100%;
 }
@@ -37,6 +41,7 @@ body {
     padding-right: 14px;
     margin: 5px;
 }
+
 .tool-button {
     margin: 12px;
     transition: all 0.1s;
@@ -49,22 +54,68 @@ body {
     text-align: center;
     user-select: none;
 }
+
 .tool-button:hover {
     box-shadow: 0px 6px 20px 0px #00000030;
     background: #0000004a;
     transform: scale(1.1);
 }
+
 .tool-button .title {
     font-weight: normal;
     font-style: normal;
     font-size: 20px;
     margin-left: 7px;
 }
+
 .swal2-modal {
     background: #292a2d !important;
     box-shadow: 0px 7px 20px #00000085 !important;
 }
+
 .swal2-input {
     border: none !important;
     background: #ffffff14 !important;
+}
+
+.log-info {
+    position: fixed;
+    background: #0000006b;
+    max-width: 221px;
+    right: 0;
+    white-space: nowrap;
+    bottom: 0;
+    padding: 4px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin: 6px;
+    border-radius: 5px;
+    padding-left: 13px;
+    padding-right: 13px;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-button {
+    width: 20px;
+    height: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #5a5f69;
+    border: 0px none #ffffff;
+    border-radius: 100px;
+}
+
+::-webkit-scrollbar-track {
+    background: #26292e;
+    border: 10px none #ffffff;
+    border-radius: 100px;
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
 }

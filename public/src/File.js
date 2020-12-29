@@ -17,13 +17,14 @@ export default class File extends Item {
         super(information, others, app);
         this.information = information;
         this.app = app;
+        this.type = "file"
     }
 
     onclick(event){
         const Scope = this;
         if(this.app.editor.has(this.path)) this.app.editor.get(this.path).init()
         else {
-            const editor = new Editor(this.path, ()=>{}, this.app);
+            const editor = new Editor(this.path, ()=>{}, this.app, this);
             this.app.editor.set(this.path, editor);
             editor.init();
 

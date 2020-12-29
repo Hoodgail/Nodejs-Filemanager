@@ -10,6 +10,7 @@ export default class Folder extends Item {
         }, app);
         this.information = information;
         this.app = app;
+        this.type = "folder";
     }
 
     onclick(event){

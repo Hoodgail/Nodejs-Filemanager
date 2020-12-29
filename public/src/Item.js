@@ -9,7 +9,7 @@ export default class Item extends Dom {
         this.full_name = full_name;
         this.icon_name = icon_name;
         this.icon = icon;
-        this.path = this.app.path + (this.app.path.endsWith("/")?"":"/") + this.information.full_name;
+        this.path = this.app.path + (this.app.path.endsWith("/")?"":"/") + this.full_name;
         this.selected = false;
         this.add(
             new Dom("div", {
@@ -32,17 +32,30 @@ export default class Item extends Dom {
         ]);
         this.contex.install();
     }
+    log_select(){
+        const selected = this.app.items.filter(e=>e.selected);
+        this.app.log_info.html = `${selected.length.toString().fontcolor("gold")} selected`;
+    }
     select(){
         this.selected = true;
         this.classList.add("selected");
+        this.log_select()
     }
     unselect(){
         this.selected = false;
         this.classList.remove("selected");
+        this.log_select()
     }
     toggleselect(){
         this.selected = !this.selected;
         this.select_switch.classList.toggle("selected");
+        this.log_select()
     }
-    delete(){ return (this.app.refresh(), this.app.fs.unlink(this.path)) }
+    delete({ refresh = true, remove = false }){
+        return this.app.fs.unlink(this.path).then(res => {
+            if(refresh) this.app.refresh();
+            if(remove) this.element.remove();
+            return res;
+        })
+    }
 };

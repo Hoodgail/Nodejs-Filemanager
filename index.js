@@ -1,17 +1,18 @@
 const express = require("express");
-//const cors = require("cors");
+//const cors = require("cors"); //no need
 const fs = require('fs');
 const readdir = require('fs-readdir-with-file-types');
 const nodeDiskInfo = require('node-disk-info');
 const http = require("http");
+const readFileMeta = require('read-metadata')
 const { promisify } = require('util');
 
 const api = {};
 
-
+//readFileMeta(__dirname + "/index.js", console.log)
 // api functions
 api.get__readFile = promisify(fs.readFile);
-api.get__readFileMeta = require('file-metadata');
+api.get__readFileMeta = promisify(readFileMeta);
 api.post__writeFile = promisify(fs.writeFile);
 api.post__mkdir = async function (dir) {
     if (!fs.existsSync(dir)) return await promisify(fs.mkdir)(dir);
@@ -68,7 +69,7 @@ Object.keys(api).forEach(function (name) {
 const port = 3000;
 // starts the server on port... PORT: <port>
 server.listen(port, function(){ 
-    console.log("Server listening on : ", port);
+    console.log("Server listening on :", port);
 });
 
 app.get("/terminal", (req, res) => res.sendFile(__dirname + "/public/terminal.html"))

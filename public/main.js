@@ -3,10 +3,15 @@ import Dom from "./src/Dom.js";
 import App from "./src/App.js";
 import create from "./src/create.js";
 import ContextMenu from "./src/ContextMenu.js";
+import wait from "./src/wait.js";
 
 const root = Dom.Get("#root");
 const fs = new FileSystem();
 const app = new App(root, { fs });
+const log_info = new Dom("div", { className:"log-info" });
+app.log_info = log_info;
+
+root.add(log_info)
 
 app.init("/");
 
@@ -24,9 +29,24 @@ app.tool({
 app.tool({
     icon:"delete_forever",
     icon_color:"#fd5555",
-    onclick(){
+    async onclick(){
         const selected = app.items.filter(e=>e.selected);
-        console.log(selected)
+        if(selected.length === 0) return new Toastify({
+             text:"You have no items selected",
+             duration:1600 
+        }).showToast();
+        for(let index in selected){
+            let item = selected[index]
+            item.deleted = true;
+            await item.delete({
+                refresh:false,
+                remove:true
+            });
+            app.items = app.items.filter(e=>!e.deleted);
+            log_info.html = `${"delete".fontcolor("#F44336")} : ${item.type.fontcolor("grey")} ${item.full_name}`;
+        }
+        app.refresh();
+        new Toastify({ text:`Deleted ${selected.length} item${selected.length>1?"s":""}`, duration:1600 }).showToast()
     }
 })
 

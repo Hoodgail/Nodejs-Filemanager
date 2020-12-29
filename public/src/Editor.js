@@ -8,7 +8,7 @@ export default class Editor extends Dom {
         this.item = item;
         this.path = path;
         this.editor = new Dom("div", { className:"editor-editor" })
-        this.editor = new Dom("div", { className:"editor-meta" })
+        this.meta = new Dom("div", { className:"editor-meta" })
         this.editor.style = { height:"-webkit-fill-available" }
         this.tools = new Dom("div", { className:"editor-tools" })
         this.__init = false;
@@ -19,7 +19,7 @@ export default class Editor extends Dom {
         this.add(this.tools, new Dom("div", { 
             style:"height:-webkit-fill-available;",
             append:[
-                this.meta,
+                //this.meta, //for future use
                 this.editor
             ],
             className:"editor-editor-holder" }));
@@ -41,7 +41,7 @@ export default class Editor extends Dom {
         Swal.fire({
             customClass:{
                 container:"editor-container",
-                confirmButton:"material-iconss"
+                confirmButton:"material-icons"
             },
             confirmButtonText:"close",
             html:this.element
@@ -49,17 +49,6 @@ export default class Editor extends Dom {
         if(this.__init == false){
             this.__init = true;
             this.cm = this.createCM(this.path, this.onload);
-            this.initMeta();
         }
-    }
-    async initMeta(){
-        const { displayName } = await this.app.fs.readFileMeta(this.path);
-        this.meta.add(
-            new Dom("div", {
-                append:[
-                    Icons.get(this.file.icon_name || "file") || Icons.get("file")
-                ]
-            })
-        )
     }
 }

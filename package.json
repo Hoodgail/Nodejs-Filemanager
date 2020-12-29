@@ -7,6 +7,7 @@
     "glob": "^7.1.6",
     "node-disk-info": "^1.1.0",
     "node-fetch": "^2.6.1",
+    "read-metadata": "^1.0.0",
     "socket.io": "^3.0.4",
     "util": "^0.12.3"
   },
@@ -14,6 +15,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "node .",
     "dev": "nodemon . --ignore 'public/*'"
   },
   "keywords": [],
