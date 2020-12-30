@@ -1,5 +1,5 @@
 # Screen Shot
-![screenshot](https://raw.githubusercontent.com/Hoodgail/Nodejs-Filemanager/main/screenshot.jpg)
+![screenshot](https://raw.githubusercontent.com/Hoodgail/Nodejs-Filemanager/main/screenshot.png)
 
 # Install
 
