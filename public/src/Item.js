@@ -51,11 +51,22 @@ export default class Item extends Dom {
         this.select_switch.classList.toggle("selected");
         this.log_select()
     }
-    delete({ refresh = true, remove = false }){
-        return this.app.fs.unlink(this.path).then(res => {
+    delete(config = {}){
+        const { refresh = true, remove = false } = config;
+        const then = () => {
             if(refresh) this.app.refresh();
             if(remove) this.element.remove();
-            return res;
-        })
+        }
+        if(this.type == "file"){
+            return this.app.fs.unlink(this.path).then(res => {
+                then()
+                return res;
+            })
+        } else if(this.type == "folder") {
+            return this.app.fs.rmdir(this.path, { recursive: true }).then(res => {
+                then()
+                return res;
+            })
+        }
     }
 };

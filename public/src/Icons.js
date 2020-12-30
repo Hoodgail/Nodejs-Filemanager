@@ -1,4 +1,4 @@
-import * as iconsSVG from "./iconsSVG.js";
+import * as iconsSVG from "./IconsSVG.js";
 const Icons = new Map();
 
 const get = Icons.get;

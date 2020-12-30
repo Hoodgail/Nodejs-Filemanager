@@ -10,11 +10,14 @@ export default class App {
         this.items = [];
         this.listing = new Dom("div", { className: "listing" });
         this.tools = new Dom("div", { className: "tools" });
-        this.info = new Dom("div", { className: "info" });
+        this.info = new Dom("div", { className:"info" });
+        this.pathDisplay = new Dom("div", { className:"path" });
 
         this.editor = new Map();
 
-        this.root.add(this.listing, this.info, this.tools);
+        this.root.add(this.listing, new Dom("div", {
+             className:"detail" 
+        }).add(this.info, this.pathDisplay), this.tools);
     }
     formatBytes(bytes) {
         var marker = 1024; // Change to 1000 if required
@@ -44,6 +47,25 @@ export default class App {
             )
         })
     }
+    renderPath(path, onclick){
+        const pathArray = path.split("/")
+        return pathArray.filter(r=>r).map((dir, index) => {
+            index = index + 2;
+            return new Dom("span", {
+                className:"dir-item",
+                append:[
+                    new Dom("span", { className:"slash", innerText:"/" }),
+                    new Dom("span", { 
+                        className:"dir", innerText:dir,
+                        onclick(){
+                            pathArray.length = index;
+                            onclick(pathArray.join("/"))
+                        }
+                    })
+                ]
+            })
+        });
+    }
     tool(){ this.tools.add(new ToolButton(...arguments)) }
     isValidFileName(fname){
         var rg1=/^[^\\/:\*\?"<>\|]+$/; // forbidden characters \ / : * ? " < > |
@@ -55,11 +77,12 @@ export default class App {
     init(path = "/", ignoresamepath) {
         // renders the listing
         if(!ignoresamepath) if(path === this.path) return;
-        this.listing.clear();
         this.path = path;
         this.items = [];
+        this.log_info.html = `${"open".fontcolor("lightgreen")} ${path.fontcolor("grey")}`;
         this.fs.readdir(path)
             .then(dir => {
+                this.listing.clear();
                 dir.forEach(data => {
                     if (data.isFile) {
                         const file = new File(data, this)
@@ -77,10 +100,12 @@ export default class App {
         this.fs.disk("")
             .then(([{ _used, _available, _capacity }]) => {
                 this.renderInfo({
-                    available: this.formatBytes(_available),
-                    capacity: _capacity,
-                    used: this.formatBytes(_used)
+                    Available: this.formatBytes(_available),
+                    Capacity: _capacity,
+                    Used: this.formatBytes(_used)
                 })
-            })
+            });
+        this.pathDisplay.clear();
+        this.pathDisplay.add(this.renderPath(this.path, path => this.init(path)))
     }
 }

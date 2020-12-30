@@ -225,6 +225,7 @@ export default class ContextMenu {
         this.container.addEventListener('contextmenu', this._oncontextmenu);
         this.container.addEventListener('keydown', this._oncontextmenu_keydown);
         this.container.addEventListener('click', this._onclick);
+        window.addEventListener('contextmenu',this.__onblur);
         window.addEventListener('click', this._onblur);
     }
 
@@ -234,5 +235,6 @@ export default class ContextMenu {
         this.container.removeEventListener('keydown', this._oncontextmenu_keydown);
         this.container.removeEventListener('click', this._onclick);
         window.removeEventListener('click', this.__onblur);
+        window.removeEventListener('contextmenu',this.__onblur);
     }
 }

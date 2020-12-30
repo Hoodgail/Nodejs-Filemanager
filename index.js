@@ -18,6 +18,7 @@ api.post__mkdir = async function (dir) {
     if (!fs.existsSync(dir)) return await promisify(fs.mkdir)(dir);
 }
 api.delete__unlink = promisify(fs.unlink);
+api.delete__rmdir = promisify(fs.rmdir);
 api.get__readdir = async function () {
     const res = await readdir(...arguments);
     return res.map(function (e) {

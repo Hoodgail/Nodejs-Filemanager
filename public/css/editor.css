@@ -23,9 +23,6 @@
     padding: 10px;
     margin: 10px;
 }
-.swal2-content > .swal2-html-container > .editor-child {
-    background: #0000006e;
-}
 .editor-container > .swal2-popup > .swal2-content {
     height: -webkit-fill-available !important;
     margin-top: 65px !important;
@@ -46,4 +43,8 @@
     position: absolute;
     top: 0;
     left: 0;
+}
+.editor-editor {
+    height: -webkit-fill-available;
+    width: -webkit-fill-available;
 }

@@ -39,12 +39,6 @@ export default class Dom {
     clear() {
         this.element.innerHTML = ""
     }
-    display(display = "block"){
-        this.style = {display}
-    }
-    background(background){
-        this.style = {background}
-    }
     get(query = "div", config = {}, all = false){
         return Dom.Get(query, config, all, this.element)
     }
@@ -54,14 +48,14 @@ export default class Dom {
             else res = new Dom(res, config)
         return res
     }
-    event(){
-        return this.element.addEventListener(...arguments)
-    }
-    set click(fn){
-        this.element.addEventListener("click", fn)
-    }
-    set html(string) {
-        this.element.innerHTML = string
+    event(){ return this.element.addEventListener(...arguments) }
+    set display(display = "block"){ this.style = { display } }
+    set background(background){ this.style = { background } }
+    set click(fn){ this.element.addEventListener("click", fn) }
+    get html(){ return this.element.innerHTML }
+    set html(data) {
+        if(data instanceof Dom) { this.add(data) }
+        else if (typeof data == "string") { this.element.innerHTML = data }
     }
     set style(style) {
         if(typeof style == "string") return this.element.style = style;

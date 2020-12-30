@@ -3,7 +3,6 @@ import Dom from "./src/Dom.js";
 import App from "./src/App.js";
 import create from "./src/create.js";
 import ContextMenu from "./src/ContextMenu.js";
-import wait from "./src/wait.js";
 
 const root = Dom.Get("#root");
 const fs = new FileSystem();
@@ -57,7 +56,7 @@ app.tool({
 
 app.tool({
     icon:"create_new_folder",
-    async onclick(){ create("mkdir", app) }
+    onclick(){ create("mkdir", app) }
 });
 
 new ContextMenu(root.element, [
