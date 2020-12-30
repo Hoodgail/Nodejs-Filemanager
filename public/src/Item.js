@@ -28,7 +28,8 @@ export default class Item extends Dom {
         );
         
         this.contex = new ContextMenu(this.element, [
-            { text:"delete", color:"#fd5555", onclick:() => this.delete() }
+            { text:"open", onclick:() => this.onclick() },
+            { text:"delete", color:"#fd5555", onclick:() => this.delete() },
         ]);
         this.contex.install();
     }

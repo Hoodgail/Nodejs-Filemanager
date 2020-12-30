@@ -74,6 +74,4 @@ new ContextMenu(
     lt.map(({ _title, onclick }) => ({ text:_title, onclick }))
 ).install()
 
-window.app = app;
-
 logger.log("Ready 👍")
