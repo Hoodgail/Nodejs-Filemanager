@@ -34,7 +34,7 @@ export default class Item extends Dom {
     }
     log_select(){
         const selected = this.app.items.filter(e=>e.selected);
-        this.app.log_info.html = `${selected.length.toString().fontcolor("gold")} selected`;
+        this.app.logger.log(`${selected.length.toString().fontcolor("gold")} selected`);
     }
     select(){
         this.selected = true;

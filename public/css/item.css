@@ -85,6 +85,10 @@
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 5px;
+    white-space: nowrap;
+    box-shadow: inset 0px 0px 4px #ffffff1c;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .slash {

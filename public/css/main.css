@@ -1,10 +1,9 @@
 @import "./item.css";
 @import "./editor.css";
-@import "./context.css";
-@import "./material-ocean.css";
-@import "./material-icons/main.css";
-@import "./toastify.css";
-
+@import "./context.css"; 
+@import "./material-ocean.css"; 
+@import "./material-icons/main.css"; 
+@import "./toastify.css"; 
 body {
     font-family: monospace;
     color: white;
@@ -39,6 +38,7 @@ body {
     text-align: center;
     padding-left: 14px;
     padding-right: 14px;
+    width: max-content;
     margin: 5px;
 }
 
@@ -77,20 +77,24 @@ body {
     border: none !important;
     background: #ffffff14 !important;
 }
-.log-info {
+
+.log {
     position: fixed;
-    background: #0000006b;
-    max-width: 221px;
+    width: 221px;
     right: 0;
     white-space: nowrap;
     bottom: 0;
     padding: 4px;
     text-overflow: ellipsis;
+    height: min-content;
     overflow: hidden;
-    margin: 6px;
-    border-radius: 5px;
+    margin: 11px;
     padding-left: 13px;
     padding-right: 13px;
+    background: #292a2d;
+    font-size: 9pt;
+    border: 1px solid #333333;
+    box-shadow: 4px 4px 3px -1px rgba(0, 0, 0, 0.5);
 }
 
 ::-webkit-scrollbar {
@@ -120,8 +124,63 @@ body {
 }
 
 .detail {
-        background: #26292e;
+    background: #26292e;
     height: 5vh;
     display: flex;
     width: 100%;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
+.hidden {
+    display: none;
+}
+
+.log-logs {
+    border-bottom: solid 2px #ffffff4f;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    background: #ffffff0d;
+    padding: 10px;
+    max-height: 50vh;
+    box-shadow: 1px 3px 8px #00000075;
+    margin-top: 10px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.info-up, .info-down {
+    margin-left: auto;
+    float: right;
+    display: inline;
+    transform: scale(1.2);
+    margin: auto;
+    font-size: 9pt;
+    opacity: 0.7;
+    user-select: none;
+}
+
+.info-up {
+    display: none;
+}
+
+.hidden-log .info-up {
+    display: inline !important;
+}
+
+.hidden-log .info-down, .hidden-log .log-items {
+    display: none !important;
+}
+
+.log-text {
+    display: inline;
+}
+
+.log-tools .tool-button .material-icons {
+    font-size: 10px;
+}
+
+.log-tools .tool-button {
+    margin: 1px;
+    margin-top: 10px;
 }

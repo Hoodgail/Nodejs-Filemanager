@@ -1,18 +1,20 @@
+import Dom from "./Dom.js";
 export default class ContextMenu {
     constructor(container, items) {
         this.container = container;
-
+        if(!window.contex_map) window.contex_map = new Map();
         this.dom = null;
         this.shown = false;
         this.root = true;
         this.parent = null;
         this.submenus = [];
+        this.id = (Math.random() * Date.now()).toString(36) + "." + Date.now().toString(36);
         this.items = items;
         this._onclick = e => {
             this.container.focus();
-            if (this.dom && e.target != this.dom && 
-                e.target.parentElement != this.dom && 
-                !e.target.classList.contains('item') && 
+            if (this.dom && e.target != this.dom &&
+                e.target.parentElement != this.dom &&
+                !e.target.classList.contains('item') &&
                 !e.target.parentElement.classList.contains('item')) {
                 this.hideAll();
             }
@@ -24,6 +26,10 @@ export default class ContextMenu {
 
             this.hideAll();
             this.show(e.clientX, e.clientY);
+            window.contex_map.forEach((contex, id) => {
+                if(id == this.id) return;
+                contex.hideAll();
+            })
         };
 
         this._oncontextmenu_keydown = e => {
@@ -33,55 +39,59 @@ export default class ContextMenu {
 
             this.hideAll();
             this.show(e.clientX, e.clientY);
+            window.contex_map.forEach((contex, id) => {
+                if(id == this.id) return;
+                contex.hideAll();
+            })
         };
 
         this._onblur = e => {
-            if(!this.dom) return;
-            if (!this.dom.contains(e.target)) 
-                this.hideAll();
+            if (!this.dom) return;
+            let clickedOutside = true;
+
+            e.path.forEach(item => {
+                if (!clickedOutside) return;
+                if (item.id === 'this.id') clickedOutside = false;
+            });
+
+            if (clickedOutside) this.hideAll();
         }
+        window.contex_map.set(this.id, this);
     }
 
     getMenuDom() {
-        const menu = document.createElement('div');
-        menu.classList.add('context');
-
-        for (const item of this.items) {
-            menu.appendChild(this.itemToDomEl(item));
-        }
-
+        const menu = new Dom('div', { className: "context", id:this.id });
+        for (const item of this.items) menu.add(this.generateItem(item));
+        menu.event("contextmenu", (e) => (e.preventDefault(), this.hideAll()))
         return menu;
     }
 
-    itemToDomEl(data) {
-        const item = document.createElement('div');
+    generateItem(data) {
+        const item = new Dom('div', { className: !data ? "separator" : "contex-item" });
 
-        if (data === null) {
-            item.classList = 'separator';
-            return item;
-        }
+        if (!data) return item;
 
         if (data.hasOwnProperty('color') && /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(data.color.toString())) {
-            item.style.cssText = `color: ${data.color}`;
+            item.style = { color: data.color }
         }
 
-        item.classList.add('contex-item');
-
-        const label = document.createElement('span');
-        label.classList = 'label';
-        label.innerText = data.hasOwnProperty('text') ? data['text'].toString() : '';
-        item.appendChild(label);
+        const label = new Dom('span', {
+            className: "label",
+            innerText: data.hasOwnProperty('text') ? data['text'].toString() : ''
+        });
+        item.add(label);
 
         if (data.hasOwnProperty('disabled') && data['disabled']) {
-            item.classList.add('disabled');
+            item.element.classList.add('disabled');
         } else {
-            item.classList.add('enabled');
+            item.element.classList.add('enabled');
         }
 
-        const hotkey = document.createElement('span');
-        hotkey.classList = 'hotkey';
-        hotkey.innerText = data.hasOwnProperty('hotkey') ? data['hotkey'].toString() : '';
-        item.appendChild(hotkey);
+        const hotkey = new Dom('span', {
+            classList: "hotkey",
+            innerText: data.hasOwnProperty('hotkey') ? data['hotkey'].toString() : ''
+        });
+        item.add(hotkey);
 
         if (data.hasOwnProperty('subitems') && Array.isArray(data['subitems']) && data['subitems'].length > 0) {
             const menu = new ContextMenu(this.container, data['subitems']);
@@ -106,9 +116,9 @@ export default class ContextMenu {
 
             this.submenus.push(menu);
 
-            item.classList.add('has-subitems');
-            item.addEventListener('click', openSubItems);
-            item.addEventListener('mousemove', openSubItems);
+            item.element.classList.add('has-subitems');
+            item.event('click', openSubItems);
+            item.event('mousemove', openSubItems);
         } else if (data.hasOwnProperty('submenu') && data['submenu'] instanceof ContextMenu) {
             const menu = data['submenu'];
             menu.root = false;
@@ -132,14 +142,14 @@ export default class ContextMenu {
 
             this.submenus.push(menu);
 
-            item.classList.add('has-subitems');
-            item.addEventListener('click', openSubItems);
-            item.addEventListener('mousemove', openSubItems);
+            item.element.classList.add('has-subitems');
+            item.event('click', openSubItems);
+            item.event('mousemove', openSubItems);
         } else {
-            item.addEventListener('click', e => { 
+            item.event('click', e => {
                 this.hideSubMenus();
 
-                if (item.classList.contains('disabled'))
+                if (item.element.classList.contains('disabled'))
                     return;
 
                 if (data.hasOwnProperty('onclick') && typeof data['onclick'] === 'function') {
@@ -151,9 +161,9 @@ export default class ContextMenu {
                         items: this.items,
                         data: data
                     };
-        
+
                     data['onclick'](event);
-        
+
                     if (!event.handled) {
                         this.hide();
                     }
@@ -162,7 +172,7 @@ export default class ContextMenu {
                 }
             });
 
-            item.addEventListener('mousemove', e => {
+            item.event('mousemove', e => {
                 this.hideSubMenus();
             });
         }
@@ -176,7 +186,7 @@ export default class ContextMenu {
                 this.hideSubMenus();
 
                 this.shown = false;
-                this.container.parentElement.removeChild(this.dom);
+                this.container.parentElement.removeChild(this.dom.element);
 
                 if (this.parent && this.parent.shown) {
                     this.parent.hide();
@@ -193,7 +203,7 @@ export default class ContextMenu {
         if (this.dom && this.shown) {
             this.shown = false;
             this.hideSubMenus();
-            this.container.parentElement.removeChild(this.dom);
+            this.container.parentElement.removeChild(this.dom.element);
 
             if (this.parent && this.parent.shown) {
                 this.parent.hide();
@@ -205,7 +215,7 @@ export default class ContextMenu {
         for (const menu of this.submenus) {
             if (menu.shown) {
                 menu.shown = false;
-                menu.container.removeChild(menu.dom);
+                menu.container.removeChild(menu.dom.element);
             }
             menu.hideSubMenus();
         }
@@ -213,20 +223,20 @@ export default class ContextMenu {
 
     show(x, y) {
         this.dom = this.getMenuDom();
-        
-        this.dom.style.left = `${x}px`;
-        this.dom.style.top = `${y}px`;
+
+        this.dom.element.style.left = `${x}px`;
+        this.dom.element.style.top = `${y}px`;
 
         this.shown = true;
-        this.container.parentElement.appendChild(this.dom);
+        new Dom(this.container.parentElement).add(this.dom);
     }
 
     install() {
         this.container.addEventListener('contextmenu', this._oncontextmenu);
         this.container.addEventListener('keydown', this._oncontextmenu_keydown);
         this.container.addEventListener('click', this._onclick);
-        window.addEventListener('contextmenu',this.__onblur);
-        window.addEventListener('click', this._onblur);
+        document.addEventListener('contextmenu', this.__onblur);
+        document.addEventListener('click', this._onblur);
     }
 
     uninstall() {
@@ -234,7 +244,7 @@ export default class ContextMenu {
         this.container.removeEventListener('contextmenu', this._oncontextmenu);
         this.container.removeEventListener('keydown', this._oncontextmenu_keydown);
         this.container.removeEventListener('click', this._onclick);
-        window.removeEventListener('click', this.__onblur);
-        window.removeEventListener('contextmenu',this.__onblur);
+        document.removeEventListener('click', this.__onblur);
+        document.removeEventListener('contextmenu', this.__onblur);
     }
 }

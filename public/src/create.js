@@ -14,6 +14,6 @@ export default async function create(fn, app){
     if(!app.isValidFileName(result.value)) return new Toastify({ text:"Invalid name", duration:1000 }).showToast();
     await app.fs[fn](app.path + (app.path.endsWith("/")?"":"/") + result.value, "");
     app.refresh();
-    app.log_info.html = `${fn.fontcolor("lightgreen")} : ${result.value.fontcolor("grey")}`;
+    app.logger.log(`${fn.fontcolor("lightgreen")} : ${result.value.fontcolor("grey")}`);
     new Toastify({ text:`${result.value} was created!`, duration:1000 }).showToast();
 }

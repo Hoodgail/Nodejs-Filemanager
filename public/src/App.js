@@ -48,23 +48,26 @@ export default class App {
         })
     }
     renderPath(path, onclick){
-        const pathArray = path.split("/")
-        return pathArray.filter(r=>r).map((dir, index) => {
-            index = index + 2;
+        const pathArray = path.split("/");
+        function generateInput(dir, onclick){
             return new Dom("span", {
                 className:"dir-item",
                 append:[
-                    new Dom("span", { className:"slash", innerText:"/" }),
                     new Dom("span", { 
                         className:"dir", innerText:dir,
-                        onclick(){
-                            pathArray.length = index;
-                            onclick(pathArray.join("/"))
-                        }
-                    })
+                        onclick
+                    }),
+                    new Dom("span", { className:"slash", innerText:"/" }),
                 ]
             })
-        });
+        }
+        return [generateInput("__basedir", () => onclick("/")), ...pathArray.filter(r=>r).map((dir, index) => {
+            index = index + 2;
+            return generateInput(dir, function(){
+                pathArray.length = index;
+                onclick(pathArray.join("/"));
+            })
+        })]
     }
     tool(){ this.tools.add(new ToolButton(...arguments)) }
     isValidFileName(fname){
@@ -79,7 +82,6 @@ export default class App {
         if(!ignoresamepath) if(path === this.path) return;
         this.path = path;
         this.items = [];
-        this.log_info.html = `${"open".fontcolor("lightgreen")} ${path.fontcolor("grey")}`;
         this.fs.readdir(path)
             .then(dir => {
                 this.listing.clear();
@@ -106,6 +108,6 @@ export default class App {
                 })
             });
         this.pathDisplay.clear();
-        this.pathDisplay.add(this.renderPath(this.path, path => this.init(path)))
+        this.pathDisplay.add(...this.renderPath(this.path, path => this.init(path)))
     }
 }

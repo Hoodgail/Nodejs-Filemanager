@@ -4,19 +4,16 @@ const fs = require('fs');
 const readdir = require('fs-readdir-with-file-types');
 const nodeDiskInfo = require('node-disk-info');
 const http = require("http");
-const readFileMeta = require('read-metadata')
 const { promisify } = require('util');
 
 const api = {};
 
-//readFileMeta(__dirname + "/index.js", console.log)
 // api functions
 api.get__readFile = promisify(fs.readFile);
-api.get__readFileMeta = promisify(readFileMeta);
 api.post__writeFile = promisify(fs.writeFile);
-api.post__mkdir = async function (dir) {
-    if (!fs.existsSync(dir)) return await promisify(fs.mkdir)(dir);
-}
+api.get__disk = () => nodeDiskInfo.getDiskInfo()
+api.get__getFile = { resolve(req, res, path){ res.sendFile(path) } }
+api.post__mkdir = promisify(fs.mkdir);
 api.delete__unlink = promisify(fs.unlink);
 api.delete__rmdir = promisify(fs.rmdir);
 api.get__readdir = async function () {
@@ -27,11 +24,6 @@ api.get__readdir = async function () {
         return e
     })
 };
-api.get__disk = async function () {
-    const res = await nodeDiskInfo.getDiskInfo();
-    return res;
-}
-
 const app = express();
 app.use(express.json());
 app.use(express.static("public"));
@@ -56,7 +48,9 @@ Object.keys(api).forEach(function (name) {
             // gets and returns the data requested by the client
             args = JSON.parse(args);
             args[0] = __dirname + args[0];
-            const data = await api[name](...args);
+            let data;
+            if(typeof api[name] == "function") data = await api[name](...args)
+                else return await api[name].resolve(req, res, ...args);
             return res.send({ success: true, data });
         } catch (e) {
 

@@ -15,7 +15,8 @@ export default class Folder extends Item {
 
     onclick(event){
         const path = this.app.path + (this.app.path.endsWith("/")?"":"/") + this.full_name;
-        this.app.init(path)
+        this.app.init(path);
+        this.app.logger.log(`${"open".fontcolor("lightgreen")} ${path.fontcolor("grey")}`);
     }
 
 };
