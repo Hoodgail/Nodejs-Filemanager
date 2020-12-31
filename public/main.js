@@ -4,6 +4,7 @@ import App from "./src/App.js";
 import create from "./src/create.js";
 import ContextMenu from "./src/ContextMenu.js";
 import Logger from "./src/Logger.js";
+import auth from "/auth.js";
 
 const root = Dom.Get("#root");
 const fs = new FileSystem();
@@ -15,21 +16,40 @@ const lt = [{
     onclick() { logger.clear(); }
 }];
 
-app.init("/");
+if(!auth) app.init("/");
+if(auth) Swal.fire({
+    title: 'Password',
+    input: 'text',
+    inputAttributes: {
+      autocapitalize: 'off'
+    },
+    showCancelButton: true,
+    confirmButtonText: 'Sign in',
+    showLoaderOnConfirm: true
+}).then(async ({ value, isConfirmed }) => {
+    if(!isConfirmed) return;
+    const { default:isValid } = await import("/password/" + value);
+    if(!isValid) return Swal.fire("Unorthorized", "The password you typed in was invalid", "error");
+    fs.password = value;
+    app.init("/")
+});
 
 app.tool({
     icon: "keyboard_backspace",
+    _title:"First page",
     onclick() { if (app.path !== "/") app.init("/"); }
 })
 
 app.tool({
     icon: "keyboard_arrow_left",
+    _title:"Back",
     onclick() { if (app.path !== "/") app.init(app.path.split("/").slice(0, -1).join("/")) }
 })
 
 
 app.tool({
     icon: "delete_forever",
+    _title:"Delete forever",
     icon_color: "#fd5555",
     async onclick() {
         const selected = app.items.filter(e => e.selected);
@@ -54,14 +74,15 @@ app.tool({
 
 app.tool({
     icon: "create",
+    _title:"Create File",
     onclick() { create("writeFile", app) }
 })
 
 app.tool({
     icon: "create_new_folder",
+    _title:"Create Folder",
     onclick() { create("mkdir", app) }
 });
-
 new ContextMenu(root.element, [
     { text: "Create New File", onclick() { create("writeFile", app) } },
     { text: "Create New Folder", onclick() { create("mkdir", app) } },

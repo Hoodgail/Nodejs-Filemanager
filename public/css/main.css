@@ -4,6 +4,7 @@
 @import "./material-ocean.css"; 
 @import "./material-icons/main.css"; 
 @import "./toastify.css"; 
+@import "./tippy.css"; 
 body {
     font-family: monospace;
     color: white;
@@ -183,4 +184,10 @@ body {
 .log-tools .tool-button {
     margin: 1px;
     margin-top: 10px;
+}
+.tippy-box {
+    background: #292a2d;
+    font-size: 9pt;
+    border: 1px solid #333333;
+    box-shadow: 4px 4px 3px -1px rgba(0, 0, 0, 0.5);
 }

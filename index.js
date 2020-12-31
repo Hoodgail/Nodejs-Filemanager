@@ -5,6 +5,7 @@ const readdir = require('fs-readdir-with-file-types');
 const nodeDiskInfo = require('node-disk-info');
 const http = require("http");
 const { promisify } = require('util');
+const config = require("./config.fm.js");
 
 const api = {};
 
@@ -36,18 +37,35 @@ const server = http.Server(app);
 app.get("/ApiPath.js", function (req, res) {
     res.header("content-type", "application/javascript")
         .send(`export default ${JSON.stringify(Object.keys(api))}`)
+});
+
+app.get("/auth.js", function (req, res) {
+    res.header("content-type", "application/javascript")
+        .send(`export default ${config.password?true:false}`)
 })
 
+app.get("/password/:password", function (req, res) {
+    const { password } = req.params;
+    res.header("content-type", "application/javascript")
+        .send(`export default ${password==config.password}`)
+})
 
 Object.keys(api).forEach(function (name) {
     const method = name.split("__")[0];
     const path = name.split("__")[1];
     app[method]("/api/fs/" + path, async function (req, res) {
-        let { args = "[]" } = req[method == "post" ? "body" : "query"];
+        let { args = "[]", password = "" } = req[method == "post" ? "body" : "query"];
+        if(config.password) {
+            if(password !== config.password) return res.send({
+                success:false,
+                code:1,
+                message:"Unorthorize"
+            })
+        }
         try {
             // gets and returns the data requested by the client
             args = JSON.parse(args);
-            args[0] = __dirname + args[0];
+            args[0] = (config.base || __dirname) + args[0];
             let data;
             if(typeof api[name] == "function") data = await api[name](...args)
                 else return await api[name].resolve(req, res, ...args);

@@ -4,6 +4,7 @@ export default class FileSystem {
 
     // generates the api functions
     constructor(){ 
+        this.password = null;
         ApiPath.forEach(n => {
             const args = n.split("__")
             this[args[1]] = async (...a) => {
@@ -25,6 +26,7 @@ export default class FileSystem {
         query.args = JSON.stringify(args);
         const { res = "json" } = option;
         const op = { method, headers:{ 'Content-Type': 'application/json' } };
+        if(this.password) query.password = this.password;
         if(method=="post") op.body = this.__body(query);
         return window.fetch("/api/fs/" + type + "?" + (method!=="post"?this.__query(query):""), op)
             .then(async e => await e[res || "json"]())
