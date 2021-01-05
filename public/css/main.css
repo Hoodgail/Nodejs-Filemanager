@@ -13,7 +13,7 @@ body {
 
 .listing {
     background: #36393f;
-    height: 85vh;
+    height: 88vh;
     width: 100%;
     overflow: auto;
 }
@@ -27,7 +27,7 @@ body {
 
 .tools {
     background: #40444b;
-    height: 10vh;
+    height: 7vh;
     width: 100%;
 }
 
@@ -44,7 +44,7 @@ body {
 .tool-button {
     transition: all 0.1s;
     cursor: pointer;
-    padding: 18px;
+    padding: 12px;
     background: #2c2f34;
     width: max-content;
     display: inline-flex;
@@ -55,8 +55,9 @@ body {
 }
 
 .tool-button:hover {
-    transform: scale(1.2) translate(5px, -7px);
+    transform: scale(1.2) translate(4px, -5px);
     box-shadow: 0 0 20px #000000ba;
+    border-left: solid #40444b 1px;
 }
 
 .tool-button .title {
@@ -190,4 +191,5 @@ body {
 }
 .tool-button .material-icons {
     margin: auto;
+    font-size: 20px;
 }
