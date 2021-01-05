@@ -57,6 +57,7 @@ export default class Item extends Dom {
         const then = () => {
             if(refresh) this.app.refresh();
             if(remove) this.element.remove();
+            this.app.logger.log(`${"delete".fontcolor("#F44336")} : ${this.type.fontcolor("grey")} ${this.path}`)
         }
         if(this.type == "file"){
             return this.app.fs.unlink(this.path).then(res => {

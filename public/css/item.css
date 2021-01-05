@@ -2,22 +2,22 @@
     display: inline-block;
     padding: 14px;
     background: #00000026;
-    border-radius: 5px;
-    margin: 10px;
+    margin: 6px;
     text-overflow: ellipsis;
-    width: 113px;
+    width: 90px;
     cursor: pointer;
     position: relative;
     text-align: center;
     transition: all 0.1s;
     transform: translate(0px, 0px);
+    border: solid 1px #40444b;
 }
 
 .item .switch {
     position: absolute;
-    height: 20px;
-    width: 20px;
-    border-radius: 5px;
+    height: 10px;
+    width: 10px;
+    border-radius: 50pc;
     background: transparent;
     border: solid 2px #5a5f69;
     transform: translate(-2px, -2px) scale(0.9);
@@ -71,23 +71,23 @@
     user-select: none;
     transition: all 0.1s;
 }
+
 .dir-item > span:hover {
     transform: scale(1.1);
     text-shadow: 0 0 11px white;
 }
+
 .path {
     height: fit-content;
     margin: auto;
-    margin-right: 10px;
+    margin-right: 1px;
     display: flex;
-    background: #0000007a;
-    padding: 6px;
+    padding: 5px;
     padding-left: 10px;
     padding-right: 10px;
-    border-radius: 5px;
     white-space: nowrap;
-    box-shadow: inset 0px 0px 4px #ffffff1c;
     text-overflow: ellipsis;
+    background: #1c1f22;
     overflow: hidden;
 }
 

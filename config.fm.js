@@ -1,4 +1,4 @@
 module.exports = {
-    base:__dirname + "/dir",
+    base:__dirname,
     password:""
 }
