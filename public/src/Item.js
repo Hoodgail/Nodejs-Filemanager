@@ -1,5 +1,8 @@
 import Dom from "./Dom.js";
 import ContextMenu from "./ContextMenu.js"
+
+import rename from "./util/rename.js";
+
 export default class Item extends Dom {
     constructor(information, { icon, full_name, icon_name }, app){
         super("div", { className:"item", onclick: (e) => this.onclick(e) });
@@ -11,6 +14,7 @@ export default class Item extends Dom {
         this.icon = icon;
         this.path = this.app.path + (this.app.path.endsWith("/")?"":"/") + this.full_name;
         this.selected = false;
+        console.log(this);
         this.add(
             new Dom("div", {
                 className:"switch",
@@ -29,6 +33,7 @@ export default class Item extends Dom {
         
         this.contex = new ContextMenu(this.element, [
             { text:"open", onclick:() => this.onclick() },
+            { text:"rename", onclick:() => rename(this) },
             { text:"delete", color:"#fd5555", onclick:() => this.delete() },
         ]);
         this.contex.install();
@@ -51,6 +56,11 @@ export default class Item extends Dom {
         this.selected = !this.selected;
         this.select_switch.classList.toggle("selected");
         this.log_select()
+    }
+    rename(new_name){
+        let new_path = [...this.path.split("/").slice(0, -1), new_name].join("/");
+        this.app.fs.rename(this.path, new_path)
+           .then(() => this.app.refresh())
     }
     delete(config = {}){
         const { refresh = true, remove = false } = config;

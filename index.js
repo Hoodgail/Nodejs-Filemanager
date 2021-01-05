@@ -12,6 +12,7 @@ const api = {};
 // api functions
 api.get__readFile = promisify(fs.readFile);
 api.post__writeFile = promisify(fs.writeFile);
+api.post__rename = promisify(fs.rename);
 api.get__disk = () => nodeDiskInfo.getDiskInfo()
 api.get__getFile = { resolve(req, res, path){ res.sendFile(path) } }
 api.post__mkdir = promisify(fs.mkdir);
@@ -66,6 +67,7 @@ Object.keys(api).forEach(function (name) {
             // gets and returns the data requested by the client
             args = JSON.parse(args);
             args[0] = (config.base || __dirname) + args[0];
+            if(path == "rename") args[1] = (config.base || __dirname) + args[1];
             let data;
             if(typeof api[name] == "function") data = await api[name](...args)
                 else return await api[name].resolve(req, res, ...args);

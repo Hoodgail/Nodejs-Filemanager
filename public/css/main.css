@@ -55,9 +55,9 @@ body {
 }
 
 .tool-button:hover {
-    transform: scale(1.2) translate(4px, -5px);
-    box-shadow: 0 0 20px #000000ba;
-    border-left: solid #40444b 1px;
+    transform: scale(1.2) translate(0px, -5px);
+    box-shadow: 0 0 20px #00000081;
+    border: none;
 }
 
 .tool-button .title {
